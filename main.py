@@ -6,62 +6,70 @@ import os
 st.title("Monthly Records Of Lakhanpur Health Post")
 
 
-
+# caste_dict={'01':'Dalit','02':'Janjati','03':'Madheshi','04':'Muslim','05':'Brahman','06':'Other'}
+st.header("Cards are:")
 
 # --- Summary Cards for Total Male, Female, and TV Patients ---
 if os.path.exists("manshir_records.csv"):
     df_summary = pd.read_csv("manshir_records.csv")
 
-
+    total_count=len(df_summary)
     total_male = df_summary[df_summary['Gender'] == 'Male'].shape[0]
     total_female = df_summary[df_summary['Gender'] == 'Female'].shape[0]
-    total_tv = df_summary[df_summary['Expect TV'] == 'Yes'].shape[0]
+    total_Dalit=df_summary[df_summary['Cast Code']=='Dalit'].shape[0]
+    total_Janjati=df_summary[df_summary['Cast Code']=='Janjati'].shape[0]
+    total_Madheshi=df_summary[df_summary['Cast Code']=='Madheshi'].shape[0]
+    total_Muslim=df_summary[df_summary['Cast Code']=='Muslim'].shape[0]
+    total_Brahman=df_summary[df_summary['Cast Code']=='Brahman'].shape[0]
+    total_Other=df_summary[df_summary['Cast Code']=='Other'].shape[0]
 
-
-    colA, colB, colC = st.columns(3)
-
-
+    st.subheader("Total count , Total Male and Total Female:")
+    colA,col1, col2= st.columns(3)
+    
     with colA:
+         st.metric(label="Today Total Records   :", value=total_count)
+
+    with col1:
         st.metric(label="Total Male Patients", value=total_male)
 
 
-    with colB:
+    with col2:
         st.metric(label="Total Female Patients", value=total_female)
 
 
-    with colC:
-        st.metric(label="Total TV Patients", value=total_tv)
+    st.subheader("Total No ( 1.Dalit 2.Janjati 3.Madheshi 4.Muslim 5.Brahman 6.Other)")
+    col3, col4,col5,col6,col7,col8= st.columns(6)
+    
+    with col3:
+        st.metric(label="1.Total Dalit", value=total_Dalit)
+
+    with col4:
+         st.metric(label="2.Total Janjati", value=total_Janjati)
+
+    with col5:
+        st.metric(label="3.Total Madheshi", value=total_Madheshi)
+
+
+    with col6:
+        st.metric(label="4.Total Muslim", value=total_Muslim)
+
+
+    with col7:
+        st.metric(label="5.Total Brahman", value=total_Brahman)
+
+    with col8:
+         st.metric(label="6.Other", value=total_Other)
+        
 else:
     st.info("No records available to display summary.")
 
+ 
 
 
-
-# Date selection (Day, Month, Year - Nepali Calendar)
-col1, col2, col3 = st.columns(3)
-
-with col1:
-    day = st.number_input("Day", min_value=1, max_value=32, step=1)
-
-with col2:
-    month = st.selectbox(
-        "Month (Nepali Calendar)",
-        [
-            "Baisakh", "Jestha", "Ashadh", "Shrawan", "Bhadra", "Ashwin",
-            "Kartik", "Mangsir", "Poush", "Magh", "Falgun", "Chaitra"
-        ]
-    )
-
-with col3:
-    year = st.number_input("Year (B.S.)", min_value=2000, max_value=2090, step=1)
-
-st.write(f"### Selected Date: {day} {month}, {year}")
-(f"### Selected Month: {month}")
 
 # File name to store records (ensure this is defined before any use)
 csv_file = "manshir_records.csv"
 
-("Manshir Month Record App")
 
 # --- Existing code above ---
 
@@ -81,27 +89,55 @@ if os.path.exists(csv_file):
 else:
     st.info("No records found to download.")
 
-st.header("Patient Information Form")
 
+
+st.header("Enter Today Date:")
+
+# Date selection (Day, Month, Year - Nepali Calendar)
+col1, col2, col3 = st.columns(3)
+
+with col1:
+    day = st.number_input("Day", min_value=1, max_value=32, step=1)
+
+with col2:
+    month = st.selectbox(
+        "Month (Nepali Calendar)",
+        [
+            "Baisakh", "Jestha", "Ashadh", "Shrawan", "Bhadra", "Ashwin",
+            "Kartik", "Mangsir", "Poush", "Magh", "Falgun", "Chaitra"
+        ]
+    )
+
+with col3:
+    year = st.number_input("Year (B.S.)", min_value=2000, max_value=2082, step=1)
+
+st.write(f"### Selected Date: {day} {month}, {year}")
+
+caste_dict={'01:Dalit':'Dalit','02:Janjati':'Janjati','03:Madheshi':'Madheshi','04:Muslim':'Muslim','05:Brahman':'Brahman','06:Other':'Other'}
+
+
+st.header("Patient Information Form")
 # Input fields
 master_reg_no = st.text_input("Master Registration Number")
-question_type = st.selectbox("OPD Type", ["New", "Old"])
+opd_type = st.selectbox("OPD Type", ["Old", "New"])
+if opd_type=="New":
+    opd_type=st.text_input('Enter New OPD Number:')
 patient_name = st.text_input("Patient's Name")
-cast_code = st.text_input("Cast Code")
-age = st.number_input("Age", min_value=0, max_value=120, step=1)
-gender = st.radio("Gender", ["Male", "Female", "Other"])
+cast_code = st.selectbox("Cast Code", ["01:Dalit","02:Janjati","03:Madheshi","04:Muslim","05:Brahman","06:Other"])
+age = st.number_input("Age", min_value=0, max_value=120, step=1,value=25)
+gender = st.radio("Gender", ["Female", "Male", "Other"])
 municipality = st.selectbox("Municipality", ["Sakhuwa Parshauni"])
 expect_tv = st.radio("Expect TV Patients", ["No", "Yes"])
 
 # File name for storing the data
-csv_file = "manshir_records.csv"
+csv_file ="manshir_records.csv"
 
 if st.button("Save Record"):
     data = {
         "Master Registration Number": master_reg_no,
-        "Question Type": question_type,
+        "OPD Type": opd_type,
         "Patient Name": patient_name,
-        "Cast Code": cast_code,
+        "Cast Code": caste_dict[cast_code],
         "Age": age,
         "Gender": gender,
         "Municipality": municipality,
