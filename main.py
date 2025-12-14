@@ -11,8 +11,51 @@ st.header("Cards are:")
 
 # --- Summary Cards for Total Male, Female, and TV Patients ---
 if os.path.exists("manshir_records.csv"):
-    df_summary = pd.read_csv("manshir_records.csv")
+    df_summary1 = pd.read_csv("manshir_records.csv")
+    choose_num=st.selectbox("choose type:",['Old','New'])
+    if choose_num=='Old':
+        st.header("Old Records:")
+        col11,col12,col13=st.columns(3)
 
+        total_old=len(df_summary1[df_summary1["OPD Type"]=="Old"])
+
+        total_old_male = df_summary1[(df_summary1["OPD Type"] == "Old") & (df_summary1["Gender"] == "Male")].shape[0]
+
+        total_old_female = df_summary1[(df_summary1["OPD Type"] == "Old") & (df_summary1["Gender"] == "Female")].shape[0]
+
+        with col11:
+            st.metric(label="Total:",value=total_old)
+        with col12:
+            st.metric(label="Total Male:",value=total_old_male)
+        with col13:
+            st.metric(label="Total Female:",value=total_old_female)
+        
+    else:
+            st.header("New Records:")
+            col21,col22,col23=st.columns(3)
+
+            total_old=len(df_summary1[df_summary1["OPD Type"]!="Old"])
+
+            total_old_male = df_summary1[(df_summary1["OPD Type"] != "Old") & (df_summary1["Gender"] == "Male")].shape[0]
+
+            total_old_female = df_summary1[(df_summary1["OPD Type"] != "Old") & (df_summary1["Gender"] == "Female")].shape[0]
+
+            with col21:
+                st.metric(label="Total:",value=total_old)
+            with col22:
+                st.metric(label="Total Male:",value=total_old_male)
+            with col23:
+                st.metric(label="Total Female:",value=total_old_female)
+
+
+
+
+
+
+
+
+
+    df_summary = pd.read_csv("manshir_records.csv")
     total_count=len(df_summary)
     total_male = df_summary[df_summary['Gender'] == 'Male'].shape[0]
     total_female = df_summary[df_summary['Gender'] == 'Female'].shape[0]
@@ -27,7 +70,7 @@ if os.path.exists("manshir_records.csv"):
     colA,col1, col2= st.columns(3)
     
     with colA:
-         st.metric(label="Today Total Records   :", value=total_count)
+         st.metric(label="Today Total Records  :", value=total_count)
 
     with col1:
         st.metric(label="Total Male Patients", value=total_male)
