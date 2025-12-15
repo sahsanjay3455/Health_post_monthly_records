@@ -7,13 +7,32 @@ st.title("Monthly Records Of Lakhanpur Health Post")
 
 
 # caste_dict={'01':'Dalit','02':'Janjati','03':'Madheshi','04':'Muslim','05':'Brahman','06':'Other'}
+
 st.header("Cards are:")
 
 # --- Summary Cards for Total Male, Female, and TV Patients ---
 if os.path.exists("manshir_records.csv"):
     df_summary1 = pd.read_csv("manshir_records.csv")
-    choose_num=st.selectbox("choose type:",['Old','New'])
-    if choose_num=='Old':
+    choose_num=st.selectbox("choose type:",['All','Old','New',])
+    if choose_num=='All':
+        
+         col0,col1, col2= st.columns(3)
+
+         total_count=len(df_summary1)
+         total_male = df_summary1[df_summary1['Gender'] == 'Male'].shape[0]
+         total_female = df_summary1[df_summary1['Gender'] == 'Female'].shape[0]
+         
+
+         with col0:
+            st.metric(label="Today Total Records  :", value=total_count)
+
+         with col1:
+            st.metric(label="Total Male Patients", value=total_male)
+
+         with col2:
+            st.metric(label="Total Female Patients", value=total_female)
+        
+    elif choose_num=='Old':
         st.header("Old Records:")
         col11,col12,col13=st.columns(3)
 
@@ -50,15 +69,10 @@ if os.path.exists("manshir_records.csv"):
 
 
 
-
-
-
-
+    choose_num1=st.selectbox("choose type:",['All','Male','Female',])
 
     df_summary = pd.read_csv("manshir_records.csv")
-    total_count=len(df_summary)
-    total_male = df_summary[df_summary['Gender'] == 'Male'].shape[0]
-    total_female = df_summary[df_summary['Gender'] == 'Female'].shape[0]
+
     total_Dalit=df_summary[df_summary['Cast Code']=='Dalit'].shape[0]
     total_Janjati=df_summary[df_summary['Cast Code']=='Janjati'].shape[0]
     total_Madheshi=df_summary[df_summary['Cast Code']=='Madheshi'].shape[0]
@@ -66,45 +80,106 @@ if os.path.exists("manshir_records.csv"):
     total_Brahman=df_summary[df_summary['Cast Code']=='Brahman'].shape[0]
     total_Other=df_summary[df_summary['Cast Code']=='Other'].shape[0]
 
-    st.subheader("Total count , Total Male and Total Female:")
-    colA,col1, col2= st.columns(3)
     
-    with colA:
-         st.metric(label="Today Total Records  :", value=total_count)
 
-    with col1:
-        st.metric(label="Total Male Patients", value=total_male)
-
-
-    with col2:
-        st.metric(label="Total Female Patients", value=total_female)
-
-
-    st.subheader("Total No ( 1.Dalit 2.Janjati 3.Madheshi 4.Muslim 5.Brahman 6.Other)")
-    col3, col4,col5,col6,col7,col8= st.columns(6)
     
-    with col3:
-        st.metric(label="1.Total Dalit", value=total_Dalit)
 
-    with col4:
-         st.metric(label="2.Total Janjati", value=total_Janjati)
+    if choose_num1=='All':
+        st.subheader("Total  ( 1.Dalit 2.Janjati 3.Madheshi 4.Muslim 5.Brahman 6.Other)")
 
-    with col5:
-        st.metric(label="3.Total Madheshi", value=total_Madheshi)
+        col3, col4,col5,col6,col7,col8= st.columns(6)
+    
+        with col3:
+         st.metric(label="1.Total Dalit", value=total_Dalit)
 
+        with col4:
+             st.metric(label="2.Total Janjati", value=total_Janjati)
 
-    with col6:
-        st.metric(label="4.Total Muslim", value=total_Muslim)
+        with col5:
+         st.metric(label="3.Total Madheshi", value=total_Madheshi)
 
+        with col6:
+            st.metric(label="4.Total Muslim", value=total_Muslim)
 
-    with col7:
-        st.metric(label="5.Total Brahman", value=total_Brahman)
+        with col7:
+            st.metric(label="5.Total Brahman", value=total_Brahman)
 
-    with col8:
+        with col8:
          st.metric(label="6.Other", value=total_Other)
-        
-else:
-    st.info("No records available to display summary.")
+    
+    elif choose_num1=='Male':
+        st.subheader("Male ( 1.Dalit 2.Janjati 3.Madheshi 4.Muslim 5.Brahman 6.Other)")
+        total_male_dalit = df_summary1[(df_summary1["Cast Code"] == "Dalit") & (df_summary1["Gender"] == "Male")].shape[0]
+
+        total_male_janjati = df_summary1[(df_summary1["Cast Code"] == "Janjati") & (df_summary1["Gender"] == "Male")].shape[0]
+
+        total_male_madheshi = df_summary1[(df_summary1["Cast Code"] == "Madheshi") & (df_summary1["Gender"] == "Male")].shape[0]
+
+        total_male_muslim = df_summary1[(df_summary1["Cast Code"] == "Muslim") & (df_summary1["Gender"] == "Male")].shape[0]
+
+        total_male_brahman = df_summary1[(df_summary1["Cast Code"] == "Brahman") & (df_summary1["Gender"] == "Male")].shape[0]
+
+        total_male_other = df_summary1[(df_summary1["Cast Code"] == "Other") & (df_summary1["Gender"] == "Male")].shape[0]
+
+        col3, col4,col5,col6,col7,col8= st.columns(6)
+    
+        with col3:
+         st.metric(label="1.Total Dalit", value=total_male_dalit)
+
+        with col4:
+             st.metric(label="2.Total Janjati", value=total_male_janjati)
+
+        with col5:
+         st.metric(label="3.Total Madheshi", value=total_male_madheshi)
+
+        with col6:
+            st.metric(label="4.Total Muslim", value=total_male_muslim)
+
+        with col7:
+            st.metric(label="5.Total Brahman", value=total_male_brahman)
+
+        with col8:
+         st.metric(label="6.Other", value=total_male_other)
+
+    
+
+    
+    elif choose_num1=='Female':
+        st.subheader("Female ( 1.Dalit 2.Janjati 3.Madheshi 4.Muslim 5.Brahman 6.Other)")
+        total_female_dalit = df_summary1[(df_summary1["Cast Code"] == "Dalit") & (df_summary1["Gender"] == "Female")].shape[0]
+
+        total_female_janjati = df_summary1[(df_summary1["Cast Code"] == "Janjati") & (df_summary1["Gender"] == "Female")].shape[0]
+
+        total_female_madheshi = df_summary1[(df_summary1["Cast Code"] == "Madheshi") & (df_summary1["Gender"] == "Female")].shape[0]
+
+        total_female_muslim = df_summary1[(df_summary1["Cast Code"] == "Muslim") & (df_summary1["Gender"] == "Female")].shape[0]
+
+        total_female_brahman = df_summary1[(df_summary1["Cast Code"] == "Brahman") & (df_summary1["Gender"] == "Female")].shape[0]
+
+        total_female_other = df_summary1[(df_summary1["Cast Code"] == "Other") & (df_summary1["Gender"] == "Female")].shape[0]
+
+        col3, col4,col5,col6,col7,col8= st.columns(6)
+    
+        with col3:
+         st.metric(label="1.Total Dalit", value=total_female_dalit)
+
+        with col4:
+             st.metric(label="2.Total Janjati", value=total_female_janjati)
+
+        with col5:
+         st.metric(label="3.Total Madheshi", value=total_female_madheshi)
+
+        with col6:
+            st.metric(label="4.Total Muslim", value=total_female_muslim)
+
+        with col7:
+            st.metric(label="5.Total Brahman", value=total_female_brahman)
+
+        with col8:
+         st.metric(label="6.Other", value=total_female_other)
+         
+    else:
+        st.info("No records available to display summary.")
 
  
 
@@ -225,6 +300,79 @@ if st.button("Combine Files"):
         st.success("Combined CSV created as 'combined_records.csv'")
     else:
         st.error("Please upload at least one CSV file.")
+
+
+
+
+st.subheader("Delete Specific Record")
+
+delete_by = st.radio(
+    "Delete record using:",
+    ["Patient Name"]
+)
+
+delete_value = st.text_input(f"Enter {delete_by}")
+
+if st.button("Delete Record"):
+    if os.path.exists(csv_file):
+        df = pd.read_csv(csv_file)
+
+        if delete_by == "Patient Name":
+            df_new = df[df["Patient Name"] != delete_value]
+
+        if len(df) == len(df_new):
+            st.warning("No matching record found!")
+        else:
+            df_new.to_csv(csv_file, index=False)
+            st.success("Record deleted successfully!")
+    else:
+        st.error("CSV file not found!")
+
+
+st.subheader("Update Record (Using Patient Name)")
+
+update_name = st.text_input("Enter Patient Name to Update")
+
+if os.path.exists(csv_file):
+    df = pd.read_csv(csv_file)
+
+    if update_name in df["Patient Name"].values:
+        st.success("Record found! Update details below 👇")
+
+        row = df[df["Patient Name"] == update_name].iloc[0]
+
+        new_age = st.number_input(
+            "Age", 0, 120, int(row["Age"])
+        )
+
+        new_gender = st.selectbox(
+            "Gender",
+            ["Female", "Male", "Other"],
+            index=["Female", "Male", "Other"].index(row["Gender"])
+        )
+
+        new_cast = st.selectbox(
+            "Cast Code",
+            ["Dalit", "Janjati", "Madheshi", "Muslim", "Brahman", "Other"],
+            index=["Dalit","Janjati","Madheshi","Muslim","Brahman","Other"].index(row["Cast Code"])
+        )
+
+        new_tv = st.radio("Expect TV Patients",["No", "Yes"],key="update_expect_tv")
+
+        if st.button("Update Record"):
+            df.loc[df["Patient Name"] == update_name, [
+                "Age", "Gender", "Cast Code", "Expect TV"
+            ]] = [new_age, new_gender, new_cast, new_tv]
+
+            df.to_csv(csv_file, index=False)
+            st.success("✅ Record updated successfully!")
+
+    else:
+        st.warning("❌ Patient name not found!")
+else:
+    st.error("CSV file not found!")
+
+
 st.subheader("Clear All Records")
 
 if st.button("Clear Records"):
