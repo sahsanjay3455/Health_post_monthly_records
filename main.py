@@ -13,7 +13,7 @@ st.header("Cards are:")
 # --- Summary Cards for Total Male, Female, and TV Patients ---
 if os.path.exists("manshir_records.csv"):
     df_summary1 = pd.read_csv("manshir_records.csv")
-    choose_num=st.selectbox("choose type:",['All','Old','New',])
+    choose_num=st.selectbox("choose type ['All','Old','New']:",['All','Old','New'])
     if choose_num=='All':
         
          col0,col1, col2= st.columns(3)
@@ -69,7 +69,7 @@ if os.path.exists("manshir_records.csv"):
 
 
 
-    choose_num1=st.selectbox("choose type:",['All','Male','Female',])
+    choose_num1=st.selectbox("choose type ['All','Male','Female']:",['All','Male','Female'])
 
     df_summary = pd.read_csv("manshir_records.csv")
 
